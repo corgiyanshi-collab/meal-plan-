@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小猪厨的爱心食谱</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #faf7f3;
+  --card: #ffffff;
+  --ink: #2a2118;
+  --ink-mid: #7a6a60;
+  --ink-light: #b8a99e;
+  --border: #ece5dc;
+  --dawn: #c8703a;
+  --dawn-soft: #fdf1e8;
+  --dawn-mid: #efc49a;
+  --leaf: #4f7a5c;
+  --leaf-soft: #eaf3ec;
+  --leaf-mid: #a6c9b0;
+  --dusk: #6b5fa0;
+  --dusk-soft: #eeedf8;
+  --dusk-mid: #b8b2d8;
+  --fruit: #c0462a;
+  --fruit-soft: #fdeee9;
+  --protein: #8a6020;
+  --protein-soft: #fdf5e6;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 28px 16px 80px;
+}
+
+.page { max-width: 620px; margin: 0 auto; }
+
+.header { text-align: center; margin-bottom: 36px; }
+.header .label { font-size: 11px; letter-spacing: 0.22em; color: var(--ink-light); text-transform: uppercase; margin-bottom: 10px; }
+.header h1 { font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 500; color: var(--ink); margin-bottom: 6px; line-height: 1.5; }
+.header p { font-size: 12.5px; color: var(--ink-mid); font-weight: 300; }
+
+.result-card {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 20px 20px 18px;
+  margin-bottom: 28px; position: relative; overflow: hidden;
+}
+.result-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--dawn) 0%, var(--leaf) 50%, var(--dusk) 100%);
+}
+.result-title { font-size: 11px; letter-spacing: 0.14em; color: var(--ink-light); text-transform: uppercase; margin-bottom: 14px; font-weight: 500; }
+.result-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.result-row { display: flex; align-items: flex-start; gap: 10px; }
+.result-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.dot-dawn { background: var(--dawn); }
+.dot-leaf { background: var(--leaf); }
+.dot-dusk { background: var(--dusk); }
+.result-meal-label { font-size: 11px; color: var(--ink-light); width: 28px; flex-shrink: 0; padding-top: 1px; }
+.result-meal-content { flex: 1; }
+.result-meal-main { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+.result-meal-sub { font-size: 11.5px; color: var(--ink-mid); margin-top: 2px; font-weight: 300; }
+
+.nutrition-bar {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;
+  padding: 10px 12px; background: var(--bg); border-radius: var(--radius-sm);
+}
+.nutri-tag { font-size: 11px; padding: 3px 8px; border-radius: 10px; }
+.n-carb    { background: #fdecd8; color: #b05a20; }
+.n-protein { background: #eaf3ec; color: #3d6b4a; }
+.n-fat     { background: #eeedf8; color: #5a50a0; }
+.n-fiber   { background: #fdeee9; color: #b03020; }
+.n-vitamin { background: #fdf5e6; color: #8a6020; }
+
+.roll-btn {
+  width: 100%; padding: 12px; background: var(--ink); color: white;
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'Noto Sans SC', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; letter-spacing: 0.05em; transition: opacity 0.18s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.roll-btn:hover { opacity: 0.78; }
+
+.section { margin-bottom: 28px; }
+.section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.section-bar { width: 3px; height: 18px; border-radius: 2px; flex-shrink: 0; }
+.bar-dawn { background: var(--dawn); }
+.bar-leaf { background: var(--leaf); }
+.bar-dusk { background: var(--dusk); }
+.section-head h2 { font-family: 'Noto Serif SC', serif; font-size: 15px; font-weight: 500; flex: 1; }
+.section-head .count { font-size: 11px; color: var(--ink-light); font-weight: 300; }
+
+.breakfast-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+.breakfast-card {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 14px 10px 12px; text-align: center; position: relative;
+  transition: border-color 0.15s, background 0.15s;
+}
+.breakfast-card:hover { border-color: var(--dawn-mid); background: var(--dawn-soft); }
+.breakfast-card .emoji { font-size: 24px; margin-bottom: 7px; display: block; }
+.breakfast-card .name { font-size: 12.5px; font-weight: 500; margin-bottom: 4px; }
+.breakfast-card .includes { font-size: 10px; color: var(--ink-mid); line-height: 1.5; font-weight: 300; }
+.breakfast-card .del-btn {
+  position: absolute; top: 5px; right: 5px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: none; background: #ece5dc; color: var(--ink-mid);
+  font-size: 11px; cursor: pointer; display: none;
+  align-items: center; justify-content: center; line-height: 1;
+}
+.breakfast-card:hover .del-btn { display: flex; }
+.breakfast-card .del-btn:hover { background: #f5c4b0; color: #a83020; }
+
+.fixed-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--dawn-soft); border: 1px solid var(--dawn-mid);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 11px; color: var(--dawn); font-weight: 500; margin-bottom: 12px;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 20px; font-size: 12.5px; }
+.chip-leaf    { background: var(--leaf-soft);    color: var(--leaf);    border: 1px solid var(--leaf-mid); }
+.chip-dusk    { background: var(--dusk-soft);    color: var(--dusk);    border: 1px solid var(--dusk-mid); }
+.chip-fruit   { background: var(--fruit-soft);   color: var(--fruit);   border: 1px solid #f0b8a8; }
+.chip-protein { background: var(--protein-soft); color: var(--protein); border: 1px solid #e8d0a0; }
+.chip .chip-del {
+  width: 14px; height: 14px; border-radius: 50%; border: none;
+  background: transparent; color: inherit; font-size: 12px;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; opacity: 0.45; padding: 0; line-height: 1; transition: opacity 0.15s;
+}
+.chip .chip-del:hover { opacity: 1; }
+
+.sub-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  color: var(--ink-mid); margin-bottom: 8px; margin-top: 14px; text-transform: uppercase;
+}
+.sub-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.add-row { display: flex; gap: 8px; align-items: center; }
+.add-input {
+  flex: 1; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 7px 12px; font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12.5px; color: var(--ink); background: var(--card); outline: none; transition: border-color 0.15s;
+}
+.add-input:focus { border-color: var(--ink-mid); }
+.add-input::placeholder { color: var(--ink-light); }
+.add-btn {
+  padding: 7px 14px; border: none; border-radius: var(--radius-sm);
+  font-family: 'Noto Sans SC', sans-serif; font-size: 12.5px; font-weight: 500;
+  cursor: pointer; transition: opacity 0.15s; white-space: nowrap;
+}
+.add-btn:hover { opacity: 0.8; }
+.btn-dawn    { background: var(--dawn);    color: white; }
+.btn-leaf    { background: var(--leaf);    color: white; }
+.btn-dusk    { background: var(--dusk);    color: white; }
+.btn-fruit   { background: var(--fruit);   color: white; }
+.btn-protein { background: var(--protein); color: white; }
+
+.breakfast-add {
+  background: var(--card); border: 1.5px dashed var(--dawn-mid);
+  border-radius: var(--radius); padding: 12px 14px; margin-bottom: 4px;
+}
+.breakfast-add .ba-title { font-size: 11.5px; color: var(--dawn); font-weight: 500; margin-bottom: 9px; }
+.breakfast-add .ba-fields { display: flex; gap: 7px; flex-wrap: wrap; }
+.ba-input {
+  flex: 1; min-width: 100px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 6px 10px;
+  font-family: 'Noto Sans SC', sans-serif; font-size: 12px;
+  color: var(--ink); background: var(--bg); outline: none;
+}
+.ba-input:focus { border-color: var(--dawn-mid); }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--ink); color: white;
+  padding: 9px 18px; border-radius: 20px;
+  font-size: 13px; transition: transform 0.25s ease;
+  z-index: 999; pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.empty { font-size: 12px; color: var(--ink-light); font-style: italic; padding: 4px 2px; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinning-icon { display: inline-block; animation: spin 0.5s linear infinite; }
+
+@media (max-width: 380px) {
+  .breakfast-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="label">小猪厨 × 打工兔</div>
+    <h1>🐷 今天做什么好呢</h1>
+    <p>营养均衡 · 每天不重样 · 用爱烹饪</p>
+  </div>
+
+  <div class="result-card">
+    <div class="result-title">今日食谱</div>
+    <div class="result-rows" id="result-rows">
+      <div style="text-align:center; color:var(--ink-light); font-size:13px; padding:10px 0;">
+        点击下方按钮，为打工兔🐰抽取今日菜单
+      </div>
+    </div>
+    <div class="nutrition-bar" id="nutrition-bar" style="display:none;"></div>
+    <button class="roll-btn" id="roll-btn" onclick="rollAll()">
+      🎲 随机抽取今日菜单
+    </button>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-bar bar-dawn"></div>
+      <h2>早餐</h2>
+      <span class="count" id="b-count"></span>
+    </div>
+    <div class="fixed-tag">🥚 每套必含：鸡蛋 ＋ 补充雌激素的饮品</div>
+    <div class="breakfast-grid" id="breakfast-grid"></div>
+    <div class="breakfast-add">
+      <div class="ba-title">＋ 添加早餐套餐</div>
+      <div class="ba-fields">
+        <input class="ba-input" id="ba-emoji" placeholder="🥐" maxlength="4" style="max-width:58px;">
+        <input class="ba-input" id="ba-name" placeholder="套餐名称">
+        <input class="ba-input" id="ba-extra" placeholder="额外说明（选填）">
+        <button class="add-btn btn-dawn" onclick="addBreakfast()">添加</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-bar bar-leaf"></div>
+      <h2>午餐</h2>
+      <span class="count" id="l-count"></span>
+    </div>
+    <div class="sub-label">主食 / 主菜</div>
+    <div class="chips" id="lunch-chips"></div>
+    <div class="add-row" style="margin-bottom:0;">
+      <input class="add-input" id="lunch-input" placeholder="添加午餐菜品…" onkeydown="if(event.key==='Enter')addDish('lunch')">
+      <button class="add-btn btn-leaf" onclick="addDish('lunch')">添加</button>
+    </div>
+    <div class="sub-label">水果</div>
+    <div class="chips" id="fruit-chips"></div>
+    <div class="add-row">
+      <input class="add-input" id="fruit-input" placeholder="添加水果…" onkeydown="if(event.key==='Enter')addDish('fruit')">
+      <button class="add-btn btn-fruit" onclick="addDish('fruit')">添加</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-bar bar-dusk"></div>
+      <h2>晚餐</h2>
+      <span class="count" id="d-count"></span>
+    </div>
+    <div class="sub-label">主食 / 主菜</div>
+    <div class="chips" id="dinner-chips"></div>
+    <div class="add-row" style="margin-bottom:0;">
+      <input class="add-input" id="dinner-input" placeholder="添加晚餐菜品…" onkeydown="if(event.key==='Enter')addDish('dinner')">
+      <button class="add-btn btn-dusk" onclick="addDish('dinner')">添加</button>
+    </div>
+    <div class="sub-label">追加蛋白质</div>
+    <div class="chips" id="protein-chips"></div>
+    <div class="add-row">
+      <input class="add-input" id="protein-input" placeholder="添加蛋白质食材…" onkeydown="if(event.key==='Enter')addDish('protein')">
+      <button class="add-btn btn-protein" onclick="addDish('protein')">添加</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const state = {
+  breakfast: [
+    { emoji: '🥐', name: '可颂套餐', extra: '' },
+    { emoji: '🍪', name: '曲奇套餐', extra: '' },
+    { emoji: '🥖', name: '法棍套餐', extra: '' },
+  ],
+  lunch:   ['酸菜炒面','青椒小炒鸡','咖喱鸡','糟辣椒炒鸡','火烧云炖鸡','青椒炒肉','西葫芦红豆炖鸡','西红柿鸡蛋面'],
+  fruit:   ['李子','橙子','桃子','苹果','葡萄','草莓','蓝莓','芒果'],
+  dinner:  ['螺蛳粉','辛拉面','炒粉','酸菜炒面','茄丁肉末拌面','西红柿鸡蛋拌面'],
+  protein: ['牛肉卷','蟹柳','鸡蛋','虾仁','鱼片','豆腐'],
+};
+
+const nutriMap = {
+  breakfast: ['🌾 碳水', '🥚 蛋白质', '🌿 植物雌激素'],
+  lunch:     ['🌾 碳水', '🥩 蛋白质', '🫙 膳食纤维'],
+  fruit:     ['🍊 维生素C', '🫐 抗氧化', '🌿 膳食纤维'],
+  dinner:    ['🌾 碳水'],
+  protein:   ['💪 优质蛋白', '⚡ 铁质'],
+};
+
+const chipClass = { lunch:'chip-leaf', fruit:'chip-fruit', dinner:'chip-dusk', protein:'chip-protein' };
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function rollAll() {
+  const btn = document.getElementById('roll-btn');
+  btn.style.pointerEvents = 'none';
+  btn.innerHTML = '<span class="spinning-icon">🎲</span> 抽取中…';
+
+  setTimeout(() => {
+    const b = state.breakfast.length ? pick(state.breakfast) : null;
+    const l = state.lunch.length    ? pick(state.lunch)      : null;
+    const f = state.fruit.length    ? pick(state.fruit)      : null;
+    const d = state.dinner.length   ? pick(state.dinner)     : null;
+    const p = state.protein.length  ? pick(state.protein)    : null;
+
+    document.getElementById('result-rows').innerHTML = `
+      ${b ? `<div class="result-row">
+        <div class="result-dot dot-dawn"></div>
+        <div class="result-meal-label">早餐</div>
+        <div class="result-meal-content">
+          <div class="result-meal-main">${b.emoji} ${b.name}</div>
+          <div class="result-meal-sub">🥚 鸡蛋 ＋ 雌激素饮品${b.extra ? ' ＋ ' + b.extra : ''}</div>
+        </div>
+      </div>` : ''}
+      ${l || f ? `<div class="result-row">
+        <div class="result-dot dot-leaf"></div>
+        <div class="result-meal-label">午餐</div>
+        <div class="result-meal-content">
+          <div class="result-meal-main">${l || '—'}</div>
+          <div class="result-meal-sub">${f ? '🍑 餐后水果：' + f : ''}</div>
+        </div>
+      </div>` : ''}
+      ${d || p ? `<div class="result-row">
+        <div class="result-dot dot-dusk"></div>
+        <div class="result-meal-label">晚餐</div>
+        <div class="result-meal-content">
+          <div class="result-meal-main">${d || '—'}</div>
+          <div class="result-meal-sub">${p ? '💪 追加蛋白质：' + p : ''}</div>
+        </div>
+      </div>` : ''}
+    `;
+
+    const tags = new Set();
+    if (b) nutriMap.breakfast.forEach(t => tags.add(t));
+    if (l) nutriMap.lunch.forEach(t => tags.add(t));
+    if (f) nutriMap.fruit.forEach(t => tags.add(t));
+    if (d) nutriMap.dinner.forEach(t => tags.add(t));
+    if (p) nutriMap.protein.forEach(t => tags.add(t));
+
+    const cls = ['n-carb','n-protein','n-fiber','n-vitamin','n-fat'];
+    const bar = document.getElementById('nutrition-bar');
+    bar.style.display = 'flex';
+    bar.innerHTML = '<span style="font-size:10.5px;color:var(--ink-light);margin-right:4px;flex-shrink:0;align-self:center;">今日营养</span>'
+      + [...tags].map((t, i) => `<span class="nutri-tag ${cls[i % cls.length]}">${t}</span>`).join('');
+
+    btn.style.pointerEvents = '';
+    btn.innerHTML = '🎲 再抽一次';
+    showToast('🐷 小猪厨为打工兔安排好啦！');
+  }, 480);
+}
+
+function render() {
+  renderBreakfast();
+  ['lunch','fruit','dinner','protein'].forEach(renderChips);
+  updateCounts();
+}
+
+function renderBreakfast() {
+  document.getElementById('breakfast-grid').innerHTML = state.breakfast.map((b, i) => `
+    <div class="breakfast-card">
+      <button class="del-btn" onclick="delBreakfast(${i})">×</button>
+      <span class="emoji">${b.emoji || '🍽️'}</span>
+      <div class="name">${b.name}</div>
+      <div class="includes">🥚 鸡蛋 ＋ 雌激素饮品${b.extra ? '<br>' + b.extra : ''}</div>
+    </div>
+  `).join('');
+  document.getElementById('b-count').textContent = state.breakfast.length + ' 种';
+}
+
+function renderChips(type) {
+  const container = document.getElementById(type + '-chips');
+  const arr = state[type];
+  container.innerHTML = arr.length
+    ? arr.map((d, i) => `<span class="chip ${chipClass[type]}">${d}<button class="chip-del" onclick="delDish('${type}',${i})">×</button></span>`).join('')
+    : '<span class="empty">暂无，添加一个吧</span>';
+}
+
+function updateCounts() {
+  document.getElementById('l-count').textContent = state.lunch.length + ' 道主食 · ' + state.fruit.length + ' 种水果';
+  document.getElementById('d-count').textContent = state.dinner.length + ' 道主食 · ' + state.protein.length + ' 种蛋白质';
+}
+
+function addBreakfast() {
+  const emoji = document.getElementById('ba-emoji').value.trim() || '🍽️';
+  const name  = document.getElementById('ba-name').value.trim();
+  const extra = document.getElementById('ba-extra').value.trim();
+  if (!name) { showToast('请填写套餐名称'); return; }
+  state.breakfast.push({ emoji, name, extra });
+  ['ba-emoji','ba-name','ba-extra'].forEach(id => document.getElementById(id).value = '');
+  renderBreakfast();
+  showToast('✅ 已添加：' + name);
+}
+
+function delBreakfast(i) {
+  const name = state.breakfast[i].name;
+  state.breakfast.splice(i, 1);
+  renderBreakfast();
+  showToast('已移除：' + name);
+}
+
+function addDish(type) {
+  const input = document.getElementById(type + '-input');
+  const val = input.value.trim();
+  if (!val) return;
+  if (state[type].includes(val)) { showToast('已有这个啦～'); return; }
+  state[type].push(val);
+  input.value = '';
+  renderChips(type);
+  updateCounts();
+  showToast('✅ 已添加：' + val);
+}
+
+function delDish(type, i) {
+  const name = state[type][i];
+  state[type].splice(i, 1);
+  renderChips(type);
+  updateCounts();
+  showToast('已移除：' + name);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+render();
+</script>
+</body>
+</html>
